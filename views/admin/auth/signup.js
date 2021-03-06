@@ -1,5 +1,8 @@
+const layout = require('../layout');
+
 module.exports = ({ req }) => {
-  return `
+  return layout({ 
+    content: `
    <div>
     your id is: ${req.session.userId}
     <form method="POST">
@@ -10,4 +13,5 @@ module.exports = ({ req }) => {
     </form>
     </div>
   `
+  });
 }
