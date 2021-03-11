@@ -105,7 +105,7 @@ class UsersRepository{
 
 // for of loop iterates over an array
         for (let record of records) {
-            let found = true; //
+            let found = true; 
 //for in loop iterates over an object
             for (let key in filters) {
                 if (record[key] !== filters[key]) {
