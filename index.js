@@ -1,24 +1,46 @@
+const layout = require('../layout');
 
-const express = require('express');
-const bodyParser = require('body-parser')//middleware that helps in holding form requests 
-const cookieSession = require('cookie-session');
-// const usersRepo = require('./Repositories/users');
-const authRouter = require('./routes/admin/auth');
-const app = express();
-const productsRouter = require('./routes/admin/products');
-
-
-app.use(express.static('public'));
-app.use(bodyParser.urlencoded({extended: true}));
-app.use(
-    cookieSession({
-   keys:  ['lkinhdkg123k']
+module.exports = ({ products }) => {
+  const renderedProducts = products
+    .map(product => {
+      return `
+      <tr>
+        <td>${product.title}</td>
+        <td>${product.price}</td>
+        <td>
+          <a href="">
+            <button class="button is-link">
+              Edit
+            </button>
+          </a>
+        </td>
+        <td>
+          <button class="button is-danger" href="">Delete</button>
+        </td>
+      </tr>
+    `;
     })
-    );
+    .join('');
 
-app.use(authRouter);
-app.use(productsRouter);
-
-app.listen(3000, () => {
-    console.log('LISTENING');
-});
+  return layout({
+    content: `
+      <div class="control">
+        <h1 class="subtitle">Products</h1>  
+        <a href="/admin/products/new" class="button is-primary">New Product</a>
+      </div>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Price</th>
+            <th>Edit</th>
+            <th>Delete</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${renderedProducts}
+        </tbody>
+      </table>
+    `
+  });
+};
