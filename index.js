@@ -1,46 +1,25 @@
-const layout = require('../layout');
+const express = require('express');
+const bodyParser = require('body-parser');
+const cookieSession = require('cookie-session');
+const authRouter = require('./routes/admin/auth');
+const adminProductsRouter = require('./routes/admin/products');
+const productsRouter = require('./routes/products');
+const cartsRouter = require('./routes/carts');
 
-module.exports = ({ products }) => {
-  const renderedProducts = products
-    .map(product => {
-      return `
-      <tr>
-        <td>${product.title}</td>
-        <td>${product.price}</td>
-        <td>
-          <a href="">
-            <button class="button is-link">
-              Edit
-            </button>
-          </a>
-        </td>
-        <td>
-          <button class="button is-danger" href="">Delete</button>
-        </td>
-      </tr>
-    `;
-    })
-    .join('');
+const app = express();
 
-  return layout({
-    content: `
-      <div class="control">
-        <h1 class="subtitle">Products</h1>  
-        <a href="/admin/products/new" class="button is-primary">New Product</a>
-      </div>
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Title</th>
-            <th>Price</th>
-            <th>Edit</th>
-            <th>Delete</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${renderedProducts}
-        </tbody>
-      </table>
-    `
-  });
-};
+app.use(express.static('public'));
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(
+  cookieSession({
+    keys: ['lkasld235j']
+  })
+);
+app.use(authRouter);
+app.use(productsRouter);
+app.use(adminProductsRouter);
+app.use(cartsRouter);
+
+app.listen(3000, () => {
+  console.log('Listening');
+});
